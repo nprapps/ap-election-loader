@@ -15,5 +15,5 @@ psql elex -c "DELETE FROM candidates;"
 elex candidates $RACEDATE | psql elex -c "COPY candidates FROM stdin DELIMITER ',' CSV HEADER;"
 
 echo "Initialize ballot positions"
-psql elex -c "DELETE FROM ballot_positions;"
-elex ballot-positions $RACEDATE | psql elex -c "COPY ballot_positions FROM stdin DELIMITER ',' CSV HEADER;"
+psql elex -c "DELETE FROM ballot_measures;"
+elex ballot-measures $RACEDATE | psql elex -c "COPY ballot_measures FROM stdin DELIMITER ',' CSV HEADER;"

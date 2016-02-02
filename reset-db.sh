@@ -12,6 +12,7 @@ psql elex -c "CREATE TABLE races(
     racetype varchar,
     racetypeid varchar,
     description varchar,
+    electiondate date,
     initialization_data boolean,
     lastupdated date,
     national boolean,
@@ -32,9 +33,10 @@ psql elex -c "CREATE TABLE reporting_units(
     reportingunitid varchar,
     reportingunitname varchar,
     description varchar,
+    electiondate date,
     fipscode char(5),
     initialization_data bool,
-    lastupdated date,
+    lastupdated timestamp,
     level varchar,
     national varchar,
     officeid varchar,
@@ -68,7 +70,7 @@ psql elex -c "CREATE TABLE candidates(
 );"
 
 echo "Create ballot_positions table"
-psql elex -c "CREATE TABLE ballot_positions(
+psql elex -c "CREATE TABLE ballot_measures(
     id varchar,
     unique_id varchar,
     candidateid varchar,
@@ -90,13 +92,14 @@ psql elex -c "CREATE TABLE results(
     ballotorder int,
     candidateid varchar,
     description varchar,
+    electiondate date,
     fipscode char(5),
     first varchar,
     incumbent bool,
     initialization_data bool,
-    is_ballot_position bool,
+    is_ballot_measure bool,
     last varchar,
-    lastupdated varchar,
+    lastupdated timestamp,
     level varchar,
     national bool,
     officeid varchar,
@@ -121,19 +124,3 @@ psql elex -c "CREATE TABLE results(
     winner bool
 );"
 
-if [ -f $DIR/name_overrides.csv ]; then
-  ## THIS SHOULD MATCH YOUR `name_overrides.csv`
-  echo "Create name_overrides table"
-  psql elex -c "CREATE TABLE name_overrides(
-      unique_id varchar,
-      first varchar,
-      last varchar
-  );"
-
-  psql elex -c "COPY name_overrides FROM '`pwd`/name_overrides.csv' DELIMITER ',' CSV HEADER;"
-
-  psql elex -c "CREATE VIEW elex_results as
-      SELECT n.last as display_last, n.first as display_first, r.* from results as r
-          LEFT JOIN name_overrides as n on r.unique_id = n.unique_id
-  ;"
-fi
