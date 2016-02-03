@@ -1,5 +1,5 @@
 # AP ELECTION LOADER
-Relies on [the NYT/NPR AP election loader]() to get results from the AP API. Demonstrates a method putting those results into a Postgres database using the COPY method and the loader's CSV output.
+Relies on [the NYT/NPR AP election loader]() to get results from the AP API. Demonstrates a method putting those results into a PostgreSQL database using the COPY method and the loader's CSV output.
 
 ## Getting started
 
@@ -15,10 +15,16 @@ pip install -r requirements.txt
 export AP_API_KEY=<your API key>
 ```
 
-See more [in the loader docs]().
+### Bootstrap the database
 
-### Run the loader
+This will create all tables and load initial data:
+
 ```
-./init
-./update
+./bootstrap.sh
+```
+
+### Update results
+
+```
+./update.sh
 ```
